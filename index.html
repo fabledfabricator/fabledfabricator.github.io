@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabled Fabricator – High-Quality 3D Printable STL Files</title>
+    <meta name="description" content="Discover original 3D printable models by Fabled Fabricator. Sci-fi, fantasy, and functional STL files ready to enhance your 3D printing experience.">
+    <meta name="keywords" content="STL, 3D models, 3D printing, sci-fi, weapons, fantasy, Fabled Fabricator, printable files, Gumroad, Cults3D, CGTrader">
+    <meta name="author" content="Fabled Fabricator">
+
+    <!-- Open Graph for social sharing -->
+    <meta property="og:title" content="Fabled Fabricator – 3D Printable STL Models">
+    <meta property="og:description" content="Original 3D models for printing: sci-fi, fantasy, props and more.">
+    <meta property="og:image" content="https://fabledfabricator.com/avatar.png">
+    <meta property="og:url" content="https://fabledfabricator.com">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fabled Fabricator – STL Downloads for 3D Printing">
+    <meta name="twitter:description" content="High-quality printable files created by Fabled Fabricator.">
+    <meta name="twitter:image" content="https://fabledfabricator.com/avatar.png">
+    <link rel="icon" type="image/png" href="avatar.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabled Fabricator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="background" role="presentation"></div>
+    <header>
+        <img src="avatar.png" alt="Fabled Fabricator logo" alt="Avatar" class="avatar">
+        <div class="banner pulsing">Fabled Fabricator</div>
+    </header>
+    <main>
+    <section class="intro"><p>Welcome to Fabled Fabricator — a realm where ideas are forged into form. Each creation whispers a story, born of curiosity, crafted with care, and waiting to be brought to life through your hands.</p></section>
+
+        <section class="buttons social">
+            <h2>Social Media</h2>
+            <a href="https://www.youtube.com/@FabledFabricator" class="btn youtube" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="https://www.facebook.com/profile.php?id=100090603136925" class="btn facebook" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="https://www.instagram.com/fabledfabricator/" class="btn instagram" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://www.tiktok.com/@fabledfabricator" class="btn tiktok" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a>
+            <a href="https://x.com/FabledFab" class="btn twitter" target="_blank"><i class="fab fa-x-twitter"></i> Twitter (X)</a>
+        </section>
+        <section class="buttons platforms">
+            <h2>Platforms</h2>
+            <a href="https://cults3d.com/en/users/FabledFabricator/3d-models" class="btn cults" target="_blank"><i class="fas fa-cube"></i> Cults3D</a>
+            <a href="https://www.cgtrader.com/designers/fabledfabricator" class="btn cgtrader" target="_blank"><i class="fas fa-store"></i> CGTrader</a>
+            <a href="https://thangs.com/designer/fabledfabricator" class="btn thangs" target="_blank"><i class="fas fa-cubes"></i> Thangs</a>
+            <a href="https://fabledfabricator.gumroad.com/" class="btn gumroad" target="_blank"><i class="fas fa-shopping-cart"></i> Gumroad</a>
+        </section>
+        <section class="contact">
+            <div class="bottom-buttons">
+                <a href="https://www.patreon.com/c/FabledFabricator?redirect=true" class="btn patreon" target="_blank"><i class="fab fa-patreon"></i> Patreon</a>
+                <a href="https://paypal.me/fabledfabricator" class="btn paypal" target="_blank"><i class="fab fa-paypal"></i> PayPal</a>
+                <a href="mailto:fabledfabricator@gmail.com" class="btn contact"><i class="fas fa-envelope"></i> Contact Me</a>
+            </div>
+        </section>
+    </main>
+
+    <audio id="hover-sound" src="hover.mp3" preload="auto"></audio>
+    <audio id="click-sound" src="click.mp3" preload="auto"></audio>
+    <script>
+        const hoverSound = document.getElementById("hover-sound");
+        const clickSound = document.getElementById("click-sound");
+
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                hoverSound.currentTime = 0;
+                hoverSound.play();
+            });
+            button.addEventListener('click', () => {
+                clickSound.currentTime = 0;
+                clickSound.play();
+            });
+        });
+    </script>
+      <script src="smoke.js"></script>
+</body>
+    
+</html>

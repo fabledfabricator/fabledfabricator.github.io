@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Crypto Donations</title>
+<link href="style.css" rel="stylesheet"/>
+<style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      
+      
+      color: #ffffff;
+      text-align: center;
+     background: url('background.jpg') no-repeat center center fixed; background-size: cover; }
+    header {
+      padding: 30px 20px 10px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+    header p {
+      margin: 10px 0 0;
+      font-size: 16px;
+    }
+    canvas#smoke {
+      display: block;
+      width: 100%;
+      height: 120px;
+    }
+    .coin-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      justify-content: center;
+      gap: 12px;
+      padding: 20px 20px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .coin-buttons button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .coin-buttons button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+    .coin-buttons img {
+      width: 22px;
+      height: 22px;
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .wallet {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      animation: fadeIn 0.3s ease-in-out forwards;
+    }
+    .wallet p {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+    }
+    .wallet img.qrcode {
+      margin-top: 10px;
+      max-width: 150px;
+    }
+    .copy-btn {
+      margin-top: 10px;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: none;
+      background-color: #444;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .copy-btn:hover {
+      background-color: #666;
+    }
+    @keyframes fadeIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+  </style>
+</head>
+<body>
+<header>
+<h1>Support Fabled Fabricator</h1>
+<p>Choose a cryptocurrency below to donate.<br/>Thank you for helping me create!</p>
+</header>
+<canvas id="smoke" width="1920" height="120"></canvas>
+<canvas height="120" id="smoke" width="1920"></canvas>
+<div class="coin-buttons">
+<button onclick="showWallet('bitcoin_btc')" style="background-color: #f7931a;">
+<img alt="Bitcoin (BTC) icon" src="btc.png"/> Bitcoin (BTC)
+    </button>
+<button onclick="showWallet('ethereum_eth')" style="background-color: #3c3c3d;">
+<img alt="Ethereum (ETH) icon" src="eth.png"/> Ethereum (ETH)
+    </button>
+<button onclick="showWallet('usdt_erc20')" style="background-color: #26a17b;">
+<img alt="USDT (ERC20) icon" src="usdt.png"/> USDT (ERC20)
+    </button>
+<button onclick="showWallet('usdc_erc20')" style="background-color: #2775ca;">
+<img alt="USDC (ERC20) icon" src="usdc.png"/> USDC (ERC20)
+    </button>
+<button onclick="showWallet('solana_sol')" style="background-color: #00ffa3;">
+<img alt="Solana (SOL) icon" src="sol.png"/> Solana (SOL)
+    </button>
+<button onclick="showWallet('bnb_bep20')" style="background-color: #f3ba2f;">
+<img alt="BNB (BEP20) icon" src="bnb.png"/> BNB (BEP20)
+    </button>
+<button onclick="showWallet('cardano_ada')" style="background-color: #0033ad;">
+<img alt="Cardano (ADA) icon" src="ada.png"/> Cardano (ADA)
+    </button>
+<button onclick="showWallet('dogecoin_doge')" style="background-color: #c2a633;">
+<img alt="Dogecoin (DOGE) icon" src="doge.png"/> Dogecoin (DOGE)
+    </button>
+<button onclick="showWallet('litecoin_ltc')" style="background-color: #345c9c;">
+<img alt="Litecoin (LTC) icon" src="ltc.png"/> Litecoin (LTC)
+    </button>
+<button onclick="showWallet('polygon_matic')" style="background-color: #8247e5;">
+<img alt="Polygon (MATIC) icon" src="matic.png"/> Polygon (MATIC)
+    </button>
+</div>
+<div class="overlay" id="overlay_bitcoin_btc">
+<div class="wallet">
+<h2>Bitcoin (BTC) — Bitcoin Network</h2>
+<p id="bitcoin_btc_address">bc1qx7d2zdkf9fx6py9efafpwpenz85na3scs5ur08</p>
+<img alt="Bitcoin (BTC) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=bc1qx7d2zdkf9fx6py9efafpwpenz85na3scs5ur08&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('bitcoin_btc_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_ethereum_eth">
+<div class="wallet">
+<h2>Ethereum (ETH) — Ethereum Network (ERC20)</h2>
+<p id="ethereum_eth_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="Ethereum (ETH) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('ethereum_eth_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_usdt_erc20">
+<div class="wallet">
+<h2>USDT (ERC20) — Ethereum Network (ERC20)</h2>
+<p id="usdt_erc20_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="USDT (ERC20) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('usdt_erc20_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_usdc_erc20">
+<div class="wallet">
+<h2>USDC (ERC20) — Ethereum Network (ERC20)</h2>
+<p id="usdc_erc20_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="USDC (ERC20) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('usdc_erc20_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_solana_sol">
+<div class="wallet">
+<h2>Solana (SOL) — Solana Network</h2>
+<p id="solana_sol_address">E7krEw6ZvwY1kSUydHfYiJt1Bmk5QpeKajXi85K1aBhG</p>
+<img alt="Solana (SOL) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=E7krEw6ZvwY1kSUydHfYiJt1Bmk5QpeKajXi85K1aBhG&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('solana_sol_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_bnb_bep20">
+<div class="wallet">
+<h2>BNB (BEP20) — BNB Smart Chain (BEP20)</h2>
+<p id="bnb_bep20_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="BNB (BEP20) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('bnb_bep20_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_cardano_ada">
+<div class="wallet">
+<h2>Cardano (ADA) — Cardano Network</h2>
+<p id="cardano_ada_address">addr1q98puthmsa3sqdw2ag5a5tcecww8asqlz0jafxx33k9yshyryn0jmxyqhhr7sc7rh9h5m2n0xr07gu3wsdgat74a8jqs58hprf</p>
+<img alt="Cardano (ADA) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=addr1q98puthmsa3sqdw2ag5a5tcecww8asqlz0jafxx33k9yshyryn0jmxyqhhr7sc7rh9h5m2n0xr07gu3wsdgat74a8jqs58hprf&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('cardano_ada_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_dogecoin_doge">
+<div class="wallet">
+<h2>Dogecoin (DOGE) — Dogecoin Network</h2>
+<p id="dogecoin_doge_address">DPjao26CQXJJFYXRDFZ3ZsTmRUu2kU6NH6</p>
+<img alt="Dogecoin (DOGE) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=DPjao26CQXJJFYXRDFZ3ZsTmRUu2kU6NH6&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('dogecoin_doge_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_litecoin_ltc">
+<div class="wallet">
+<h2>Litecoin (LTC) — Litecoin Network</h2>
+<p id="litecoin_ltc_address">ltc1q8zmm04n6q6snwuk3jj8uhk0e42amtuexm2fux9</p>
+<img alt="Litecoin (LTC) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=ltc1q8zmm04n6q6snwuk3jj8uhk0e42amtuexm2fux9&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('litecoin_ltc_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_polygon_matic">
+<div class="wallet">
+<h2>Polygon (MATIC) — Ethereum Network (ERC20)</h2>
+<p id="polygon_matic_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="Polygon (MATIC) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('polygon_matic_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_bitcoin_btc__bitcoin_network">
+<div class="wallet">
+<h2>Bitcoin (BTC - Bitcoin Network)</h2>
+<p id="bitcoin_btc__bitcoin_network_address">bc1qx7d2zdkf9fx6py9efafpwpenz85na3scs5ur08</p>
+<img alt="Bitcoin (BTC - Bitcoin Network) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=bc1qx7d2zdkf9fx6py9efafpwpenz85na3scs5ur08&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('bitcoin_btc__bitcoin_network_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_ethereum_eth__erc20">
+<div class="wallet">
+<h2>Ethereum (ETH - ERC20)</h2>
+<p id="ethereum_eth__erc20_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="Ethereum (ETH - ERC20) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('ethereum_eth__erc20_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_usdt_erc20__ethereum_network">
+<div class="wallet">
+<h2>USDT (ERC20 - Ethereum Network)</h2>
+<p id="usdt_erc20__ethereum_network_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="USDT (ERC20 - Ethereum Network) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('usdt_erc20__ethereum_network_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_usdc_erc20__ethereum_network">
+<div class="wallet">
+<h2>USDC (ERC20 - Ethereum Network)</h2>
+<p id="usdc_erc20__ethereum_network_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="USDC (ERC20 - Ethereum Network) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('usdc_erc20__ethereum_network_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_bnb_bep20__binance_smart_chain">
+<div class="wallet">
+<h2>BNB (BEP20 - Binance Smart Chain)</h2>
+<p id="bnb_bep20__binance_smart_chain_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="BNB (BEP20 - Binance Smart Chain) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('bnb_bep20__binance_smart_chain_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_polygon_matic__erc20">
+<div class="wallet">
+<h2>Polygon (MATIC - ERC20)</h2>
+<p id="polygon_matic__erc20_address">0x8d8e428219B66681dE36314c695474a4E67138Ff</p>
+<img alt="Polygon (MATIC - ERC20) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=0x8d8e428219B66681dE36314c695474a4E67138Ff&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('polygon_matic__erc20_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_solana_sol__solana_network">
+<div class="wallet">
+<h2>Solana (SOL - Solana Network)</h2>
+<p id="solana_sol__solana_network_address">E7krEw6ZvwY1kSUydHfYiJt1Bmk5QpeKajXi85K1aBhG</p>
+<img alt="Solana (SOL - Solana Network) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=E7krEw6ZvwY1kSUydHfYiJt1Bmk5QpeKajXi85K1aBhG&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('solana_sol__solana_network_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_cardano_ada__cardano_network">
+<div class="wallet">
+<h2>Cardano (ADA - Cardano Network)</h2>
+<p id="cardano_ada__cardano_network_address">addr1q98puthmsa3sqdw2ag5a5tcecww8asqlz0jafxx33k9yshyryn0jmxyqhhr7sc7rh9h5m2n0xr07gu3wsdgat74a8jqs58hprf</p>
+<img alt="Cardano (ADA - Cardano Network) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=addr1q98puthmsa3sqdw2ag5a5tcecww8asqlz0jafxx33k9yshyryn0jmxyqhhr7sc7rh9h5m2n0xr07gu3wsdgat74a8jqs58hprf&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('cardano_ada__cardano_network_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_dogecoin_doge__dogecoin_network">
+<div class="wallet">
+<h2>Dogecoin (DOGE - Dogecoin Network)</h2>
+<p id="dogecoin_doge__dogecoin_network_address">DPjao26CQXJJFYXRDFZ3ZsTmRUu2kU6NH6</p>
+<img alt="Dogecoin (DOGE - Dogecoin Network) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=DPjao26CQXJJFYXRDFZ3ZsTmRUu2kU6NH6&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('dogecoin_doge__dogecoin_network_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+<div class="overlay" id="overlay_litecoin_ltc__litecoin_network">
+<div class="wallet">
+<h2>Litecoin (LTC - Litecoin Network)</h2>
+<p id="litecoin_ltc__litecoin_network_address">ltc1q8zmm04n6q6snwuk3jj8uhk0e42amtuexm2fux9</p>
+<img alt="Litecoin (LTC - Litecoin Network) QR Code" class="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=ltc1q8zmm04n6q6snwuk3jj8uhk0e42amtuexm2fux9&amp;size=150x150"/>
+<br/>
+<button class="copy-btn" onclick="copyToClipboard('litecoin_ltc__litecoin_network_address')">Copy Address</button>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+<p class="copy-confirmation" style="display:none; margin-top:10px; color:lime; font-weight:bold;">✔ Address copied!</p>
+</div>
+</div>
+    ✅ Thank you! Address copied.
+<script src="smoke.js"></script>
+<script>
+const clickSound = new Audio('click.mp3');
+const hoverSound = new Audio('hover.mp3');
+
+document.querySelectorAll('.coin-buttons button').forEach(btn => {
+    btn.addEventListener('mouseenter', () => hoverSound.play());
+    btn.addEventListener('click', () => clickSound.play());
+});
+
+function showWallet(id) {
+  document.querySelectorAll('.overlay').forEach(div => {
+    div.style.display = 'none';
+  });
+  const overlay = document.getElementById("overlay_" + id);
+  if (overlay) {
+    overlay.style.display = 'flex';
+  }
+}
+
+function copyToClipboard(elementId) {
+  const text = document.getElementById(elementId).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const thankYou = document.getElementById('thankYou');
+    thankYou.style.display = 'block';
+    setTimeout(() => { thankYou.style.opacity = 1; }, 100);
+    setTimeout(() => { thankYou.style.opacity = 0; }, 2000);
+    setTimeout(() => { thankYou.style.display = 'none'; }, 2500);
+    clickSound.play();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target.classList.contains('overlay')) {
+        overlay.style.display = 'none';
+      }
+    });
+  });
+});
+</script>
+
+
+<script>
+function copyToClipboard(elementId) {
+  const text = document.getElementById(elementId).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const wallet = document.getElementById(elementId).closest('.wallet');
+    const confirmMsg = wallet.querySelector('.copy-confirmation');
+    const button = wallet.querySelector('.copy-btn');
+    if (confirmMsg) {
+      confirmMsg.style.display = 'block';
+      confirmMsg.style.opacity = 1;
+      setTimeout(() => { confirmMsg.style.opacity = 0; }, 2000);
+      setTimeout(() => { confirmMsg.style.display = 'none'; }, 2500);
+    }
+    if (button) {
+      button.style.backgroundColor = '#28a745';
+      button.innerText = 'Copied!';
+      setTimeout(() => {
+        button.style.backgroundColor = '#444';
+        button.innerText = 'Copy Address';
+      }, 3000);
+    }
+    const copySound = new Audio('click.mp3');
+    copySound.play();
+  });
+}
+</script>
+</body>
+</html>
